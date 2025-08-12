@@ -1,0 +1,7 @@
+.drawerHeader {
+  display: flex;
+  gap: 20px;
+  /* .icon {
+    padding: 20px;
+  } */
+}

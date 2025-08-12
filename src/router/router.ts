@@ -7,15 +7,14 @@ import App from "../App";
 export const routerProvider = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    Component: Layout,
     children: [
       {
-        path: "/home",
-        Component: Layout,
+        Component: Home,
         children: [
           {
-            Component: Home,
             index: true,
+            path: "home",
           },
         ],
       },
