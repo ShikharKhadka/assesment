@@ -1,33 +1,55 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 import { DataTable, type UserI } from "../component/datatable"
 import { users } from "./constant"
 
 export const Home = () => {
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState<UserI[]>([]);
     // const [table]
 
-    // const onSort = (key: string, direction: boolean) => {
+    const onSort = (key: string, direction: boolean) => {
+        const dataList = data.sort((a, b) => {
+            if (a[key] < b[key]) {
+                return direction ? 1 : -1; // flipped
+            }
+            if (a[key] > b[key]) {
+                return direction ? -1 : 1; // flipped
+            }
+            return 0;
+        });
 
-    // }
+        setData(dataList);
+    };
     const getUsers = new Promise((resolve) => {
         setTimeout(() => {
             resolve(users);
         }, 1000);
     });
 
+    const onPageChange = (e:ChangeEvent<unknown>,page:number)=>{
+        setPage(page);
+        const tableList = users.slice((((page - 1) * 10)), page * 10); //default 10
+        setData(tableList);
+    }
+
 
     useEffect(() => {
-        getUsers.then((e: UserI[]) => {
-            setData(e);
+        getUsers.then((e) => {
+            const userList = e as UserI[];
+            const tableList = userList.slice((((page - 1) * 10)), page * 10);
+            setData(tableList);
         }).catch((_) => {
             setData([]);
+        }).finally(() => {
+            setLoading(false);
         })
     }, [])
 
 
-
-    const tableList = users.slice((((page - 1) * 10)), page * 10); //default 10
+    if (loading) {
+        return <div>Loading..........</div>
+    }
 
     return (
         <DataTable
@@ -37,11 +59,11 @@ export const Home = () => {
                 { key: 'role', label: 'Role', sortable: false },
                 { key: 'actions', label: 'Actions', sortable: false }
             ]}
-            rows={tableList}
+            rows={data}
             count={10}
             page={page}
             onSort={onSort}
-            onPageChange={(_, page) => setPage(page)}
+            onPageChange={onPageChange}
         />
     )
 }

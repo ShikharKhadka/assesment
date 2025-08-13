@@ -3,6 +3,9 @@ import type React from 'react';
 import { useState, type ChangeEvent } from 'react';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 // import type { ReactNode } from 'react';
 
 
@@ -79,8 +82,15 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                         {rows.map((e) => {
                             return <TableRow key={e.email}>
                                 <TableCell sx={{}}>{e.name}</TableCell>
-                                <TableCell sx={{}}>{e.role}</TableCell>
                                 <TableCell sx={{}}>{e.email}</TableCell>
+                                <TableCell sx={{}}>{e.role}</TableCell>
+                                <TableCell sx={{}}>
+                                    <Box>
+                                        <EditIcon color='primary' onClick={()=>{}} />
+                                        <VisibilityIcon color='primary'/>
+                                        <DeleteIcon color='primary'/>
+                                    </Box>
+                                </TableCell>
                             </TableRow>
                         })}
                     </TableBody>
