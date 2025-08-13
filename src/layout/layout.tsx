@@ -1,5 +1,4 @@
-import { AppBar, Button, Drawer, List, ListItem } from '@mui/material'
-import { useState } from 'react';
+import { AppBar, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useTheme } from '@mui/material'
 import { Navigate, Outlet } from 'react-router';
 import './layout.css';
 
@@ -7,70 +6,87 @@ import './layout.css';
 export interface DrawerItemI {
     id: number,
     name: string,
-    code: string
 }
 
 export const Layout = () => {
+
+    const theme = useTheme();
     const items: DrawerItemI[] = [
         {
-            code: "T1",
             id: 1,
             name: "Task 1"
         },
         {
-            code: "T2",
             id: 2,
             name: "Task 2"
         },
         {
-            code: "T3",
             id: 2,
             name: "Task 3"
         },
         {
-            code: "T4",
             id: 4,
             name: "Task 4"
         },
     ];
 
-    const [isOpen, setIsopen] = useState(false);
 
     return (
         <div>
             <Navigate to={"/home"}></Navigate>
             <div>
-                <AppBar position='fixed' sx={{ height: "64px" }}>
-                    <div>This is appBar</div>
-                    <Button onClick={() => {
-                        setIsopen((prev) => !prev);
-                    }}>Tap</Button>
+                {/* Header */}
+                <AppBar position="fixed" sx={{ backgroundColor: theme.palette.primary.main }}>
+                    <Toolbar>
+                        <Typography variant="h6" color={theme.palette.primary.contrastText}>
+                            Assessment
+                        </Typography>
+                    </Toolbar>
                 </AppBar>
-                <Drawer sx={{
-                    '& .MuiDrawer-paper': {
-                        position: 'absolute',
-                        top: 64,
-                        height: "80%"
-                    }
-                }} variant='permanent' open={isOpen}>
-                    <div>
-                        {isOpen ?
-                            <div className='drawerHeader'>
-                                <div className=''>Header</div>
-                                <div className=''>Header</div>
 
-                            </div>
-                            :
-                            <div>Header</div>
-                        }
-
-                    </div>
-                    <List sx={{ marginLeft: isOpen ? "8px" : "" }} >
-                        {items.map((e) => {
-                            return <ListItem key={e.id}>
-                                {e.name}
+                {/* Sidebar Drawer */}
+                <Drawer
+                    variant="permanent"
+                    open
+                    sx={{
+                        "& .MuiDrawer-paper": {
+                            top: "64px", // aligns under AppBar
+                            height: "calc(100% - 64px)",
+                            width: 240,
+                            boxSizing: "border-box",
+                        },
+                    }}
+                >
+                    <List>
+                        {items.map((e) => (
+                            <ListItem key={e.id} disablePadding divider>
+                                <ListItemButton>
+                                    <ListItemText primary={e.name} />
+                                </ListItemButton>
                             </ListItem>
-                        })}
+                        ))}
+                    </List>
+
+                    <List >
+                        <ListItem  disablePadding >
+                            <ListItemButton>
+                                <ListItemText primary={'Theme'} />
+                                <>Arrow</>
+                            </ListItemButton>
+                            
+                        </ListItem>
+                         <ListItem>
+                            <ListItemButton>
+                                <ListItemText primary={'Theme'} />
+                            </ListItemButton>
+                            
+                        </ListItem>
+                         <ListItem   divider >
+                            <ListItemButton>
+                                <ListItemText primary={'Theme'} />
+                            </ListItemButton>
+                            
+                        </ListItem>
                     </List>
                 </Drawer>
             </div>
