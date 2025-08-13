@@ -1,4 +1,4 @@
-import { AppBar, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useTheme } from '@mui/material'
+import { AppBar, Box, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useTheme } from '@mui/material'
 import { Navigate, Outlet } from 'react-router';
 import './layout.css';
 
@@ -39,58 +39,69 @@ export const Layout = () => {
                 <AppBar position="fixed" sx={{ backgroundColor: theme.palette.primary.main }}>
                     <Toolbar>
                         <Typography variant="h6" color={theme.palette.primary.contrastText}>
-                            Assessment
+                            Test
                         </Typography>
                     </Toolbar>
                 </AppBar>
 
-                {/* Sidebar Drawer */}
-                <Drawer
-                    variant="permanent"
-                    open
-                    sx={{
-                        "& .MuiDrawer-paper": {
-                            top: "64px", // aligns under AppBar
-                            height: "calc(100% - 64px)",
-                            width: 240,
-                            boxSizing: "border-box",
-                        },
-                    }}
-                >
-                    <List>
-                        {items.map((e) => (
-                            <ListItem key={e.id} disablePadding divider>
+                <Box sx={{ display: "flex" }}>
+                    <Drawer
+                        variant="permanent"
+                        open
+                        sx={{
+                            "& .MuiDrawer-paper": {
+                                top: "64px", // aligns under AppBar
+                                height: "calc(100% - 64px)",
+                                width: 240,
+                                boxSizing: "border-box",
+                            },
+                        }}
+                    >
+                        <List>
+                            {items.map((e) => (
+                                <ListItem key={e.id} disablePadding divider>
+                                    <ListItemButton>
+                                        <ListItemText primary={e.name} />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+
+                        <List >
+                            <ListItem disablePadding >
                                 <ListItemButton>
-                                    <ListItemText primary={e.name} />
+                                    <ListItemText primary={'Theme'} />
+                                    <>Arrow</>
+                                </ListItemButton>
+
+                            </ListItem>
+                            <ListItem>
+                                <ListItemButton>
+                                    <ListItemText primary={'Theme'} />
+                                </ListItemButton>
+
+                            </ListItem>
+                            <ListItem divider >
+                                <ListItemButton>
+                                    <ListItemText primary={'Theme'} />
                                 </ListItemButton>
                             </ListItem>
-                        ))}
-                    </List>
+                        </List>
+                    </Drawer>
+                    <Box
+                        component="main"
+                        sx={{
+                            marginTop: '64px',
+                            marginLeft: `${300}px`,
+                        }}
+                    >
+                        <Outlet />
+                    </Box>
+                </Box>
 
-                    <List >
-                        <ListItem  disablePadding >
-                            <ListItemButton>
-                                <ListItemText primary={'Theme'} />
-                                <>Arrow</>
-                            </ListItemButton>
-                            
-                        </ListItem>
-                         <ListItem>
-                            <ListItemButton>
-                                <ListItemText primary={'Theme'} />
-                            </ListItemButton>
-                            
-                        </ListItem>
-                         <ListItem   divider >
-                            <ListItemButton>
-                                <ListItemText primary={'Theme'} />
-                            </ListItemButton>
-                            
-                        </ListItem>
-                    </List>
-                </Drawer>
+                {/* Sidebar Drawer */}
+
             </div>
-            <Outlet />
         </div >
     )
 }
