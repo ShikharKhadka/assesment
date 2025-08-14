@@ -1,14 +1,16 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { DataTable, type UserI } from "../component/datatable"
 import { users } from "./constant"
-import { Box, Modal } from "@mui/material";
+import { Box } from "@mui/material";
 import CModal from "../component/model";
+import { UserEditForm } from "../component/form/usereditform";
+
 
 export const Home = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<UserI[]>([]);
-    // const [table]
+
 
     const onSort = (key: string, direction: boolean) => {
         const dataList = data.sort((a, b) => {
@@ -68,7 +70,9 @@ export const Home = () => {
                 onSort={onSort}
                 onPageChange={onPageChange}
             />
-        <CModal/>
+            <CModal>
+                <UserEditForm />
+            </CModal>
         </Box>
 
     )

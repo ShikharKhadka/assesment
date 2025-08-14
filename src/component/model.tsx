@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import { createPortal } from 'react-dom';
 import CloseIcon from '@mui/icons-material/Close';
 import type { ReactNode } from 'react';
@@ -38,15 +38,6 @@ const CModal = ({ children }: { children: ReactNode }) => {
                         </Box>
 
                         {children}
-
-                        <Box sx={{
-                            position: "absolute", bottom: "8px", left: "50%",
-                            transform: "translate(-50%, -50%)", display: "flex",
-                            gap: 2 // MUI spacing units (2 = 16px)
-                        }}>
-                            <Button variant='contained' sx={{ textTransform: "none" }}>Close</Button>
-                            <Button variant='contained' sx={{ textTransform: "none" }}>Submit</Button>
-                        </Box>
                     </Box>
                 </Box>,
                 document.body
