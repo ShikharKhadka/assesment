@@ -1,6 +1,8 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { DataTable, type UserI } from "../component/datatable"
 import { users } from "./constant"
+import { Box, Modal } from "@mui/material";
+import CModal from "../component/model";
 
 export const Home = () => {
     const [page, setPage] = useState(1);
@@ -27,7 +29,7 @@ export const Home = () => {
         }, 1000);
     });
 
-    const onPageChange = (e:ChangeEvent<unknown>,page:number)=>{
+    const onPageChange = (e: ChangeEvent<unknown>, page: number) => {
         setPage(page);
         const tableList = users.slice((((page - 1) * 10)), page * 10); //default 10
         setData(tableList);
@@ -52,18 +54,22 @@ export const Home = () => {
     }
 
     return (
-        <DataTable
-            column={[
-                { key: 'name', label: 'Full Name', sortable: true },
-                { key: 'email', label: 'Email', sortable: true },
-                { key: 'role', label: 'Role', sortable: false },
-                { key: 'actions', label: 'Actions', sortable: false }
-            ]}
-            rows={data}
-            count={10}
-            page={page}
-            onSort={onSort}
-            onPageChange={onPageChange}
-        />
+        <Box>
+            <DataTable
+                column={[
+                    { key: 'name', label: 'Full Name', sortable: true },
+                    { key: 'email', label: 'Email', sortable: true },
+                    { key: 'role', label: 'Role', sortable: false },
+                    { key: 'actions', label: 'Actions', sortable: false }
+                ]}
+                rows={data}
+                count={10}
+                page={page}
+                onSort={onSort}
+                onPageChange={onPageChange}
+            />
+        <CModal/>
+        </Box>
+
     )
 }
