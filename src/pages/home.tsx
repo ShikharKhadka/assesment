@@ -10,7 +10,11 @@ export const Home = () => {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState<UserI[]>([]);
-
+    const [rowData, setRowData] = useState<UserI | null>(null);
+    const [dialog, setDialogState] = useState({
+        editOpen: false,
+        viewOpen: false,
+    });
 
     const onSort = (key: string, direction: boolean) => {
         const dataList = data.sort((a, b) => {
@@ -22,9 +26,9 @@ export const Home = () => {
             }
             return 0;
         });
-
         setData(dataList);
     };
+
     const getUsers = new Promise((resolve) => {
         setTimeout(() => {
             resolve(users);
@@ -36,6 +40,7 @@ export const Home = () => {
         const tableList = users.slice((((page - 1) * 10)), page * 10); //default 10
         setData(tableList);
     }
+
 
 
     useEffect(() => {
@@ -69,11 +74,16 @@ export const Home = () => {
                 page={page}
                 onSort={onSort}
                 onPageChange={onPageChange}
+                render={(row) => {
+                    const rowData = row as UserI;
+                    setRowData(rowData);
+                    setDialogState({ ...dialog, editOpen: true });
+                }}
             />
-            <CModal>
-                <UserEditForm />
-            </CModal>
-        </Box>
 
+            {dialog.editOpen && <CModal size="md" title="Edit Users" isOpen={dialog.editOpen} onClose={() => setDialogState({ ...dialog, editOpen: false })} closeOnOverlayClick={false}>
+                <UserEditForm row={rowData!} />
+            </CModal>}
+        </Box >
     )
 }

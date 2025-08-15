@@ -1,11 +1,13 @@
-import { AppBar, Box, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useTheme } from '@mui/material'
+import { AppBar, Badge, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useTheme, type BadgeProps } from '@mui/material'
 import { Navigate, Outlet } from 'react-router';
 import './layout.css';
+import Cart from '../component/header/cart';
 
 
 export interface DrawerItemI {
     id: number,
     name: string,
+    path: string;
 }
 
 export const Layout = () => {
@@ -14,37 +16,51 @@ export const Layout = () => {
     const items: DrawerItemI[] = [
         {
             id: 1,
-            name: "Task 1"
+            name: "Task 1",
+            path: '/home',
         },
         {
             id: 2,
-            name: "Task 2"
+            name: "Task 2",
+            path: '/task2',
+
         },
         {
             id: 2,
-            name: "Task 3"
+            name: "Task 3",
+            path: '/home',
+
         },
         {
             id: 4,
-            name: "Task 4"
+            name: "Task 4",
+            path: '/home',
+
         },
     ];
 
 
     return (
-        <div>
-            <Navigate to={"/home"}></Navigate>
-            <div>
+        <Box sx={{
+            width: '100vw',    // full viewport width
+            height: 'auto',   // full viewport height
+        }}>
+            {/* <Navigate to={"/home"}></Navigate> */}
+            <Box >
                 {/* Header */}
                 <AppBar position="fixed" sx={{ backgroundColor: theme.palette.primary.main }}>
-                    <Toolbar>
+                    <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography variant="h6" color={theme.palette.primary.contrastText}>
                             Test
                         </Typography>
+                      <Cart/>
                     </Toolbar>
                 </AppBar>
 
-                <Box sx={{ display: "flex" }}>
+                <Box sx={{
+                    display: "flex",
+                    alignContent: 'flex-start',
+                }}>
                     <Drawer
                         variant="permanent"
                         open
@@ -52,7 +68,7 @@ export const Layout = () => {
                             "& .MuiDrawer-paper": {
                                 top: "64px", // aligns under AppBar
                                 height: "calc(100% - 64px)",
-                                width: 240,
+                                width: '240px',
                                 boxSizing: "border-box",
                             },
                         }}
@@ -91,8 +107,9 @@ export const Layout = () => {
                     <Box
                         component="main"
                         sx={{
-                            marginTop: '64px',
-                            marginLeft: `${300}px`,
+                            marginTop: '100px',
+                            paddingLeft: `${400}px`,
+                            width: 'calc(100vw )',
                         }}
                     >
                         <Outlet />
@@ -101,7 +118,7 @@ export const Layout = () => {
 
                 {/* Sidebar Drawer */}
 
-            </div>
-        </div >
+            </Box>
+        </Box >
     )
 }

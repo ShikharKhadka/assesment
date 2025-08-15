@@ -1,6 +1,6 @@
 import { Box, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import type React from 'react';
-import { useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent, type ReactNode } from 'react';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,15 +11,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 export interface DataTableI {
     column: ColumnI[],
-    rows: UserI[],
-    page: number;
-    count: number;
-    onPageChange: (event: ChangeEvent<unknown>, page: number) => void;
-    onSort: (key: string, direction: boolean) => void;
+    rows: any[],
+    page?: number;
+    count?: number;
+    onPageChange?: (event: ChangeEvent<unknown>, page: number) => void;
+    onSort?: (key: string, direction: boolean) => void;
+    render?: (row) => void
+    children?: ReactNode;
+    showSort?: boolean;
 }
 
 export interface ColumnI {
-    key: string;
+    key?: string;
     label: string;
     sortable: boolean;
     // action: ReactNode;
@@ -31,7 +34,7 @@ export interface UserI {
     role: string;
 }
 
-export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onPageChange, onSort }) => {
+export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onPageChange, onSort, render, children, showSort = true }) => {
 
     const [isDesc, setDesc] = useState(false);
     const [sortKey, setSortKey] = useState("");
@@ -44,7 +47,7 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
     };
 
     return (
-        <div style={{ width: "700px" }}>
+        <Box style={{ width: !children ? "80%" : '100%' }}>
             <TableContainer component={Paper} sx={{}}>
                 <Table>
                     <TableHead sx={{
@@ -56,9 +59,9 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                                     return <TableCell key={e.key}>
                                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                             {e.label}
-                                            <Box onClick={() => {
-                                                onSortChange(e.key)
-                                                onSort(e.key, isDesc)
+                                            {showSort && <Box onClick={() => {
+                                                onSortChange(e.key!)
+                                                onSort!(e.key!, isDesc)
                                             }}>
                                                 {sortKey == e.key ?
                                                     isDesc ?
@@ -67,7 +70,7 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                                                             fontSize="small" color="primary" sx={{ cursor: "pointer" }} /> : <ArrowDownwardIcon
                                                         fontSize="small" color="primary" sx={{ cursor: "pointer" }} />
                                                 }
-                                            </Box>
+                                            </Box>}
                                         </Box>
                                     </TableCell>
                                 }
@@ -79,26 +82,30 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                     <TableBody sx={{
                         overflowX: "auto",     // horizontal scroll
                     }}>
-                        {rows.map((e) => {
+                        {!children ? rows.map((e) => {
                             return <TableRow key={e.email}>
                                 <TableCell sx={{}}>{e.name}</TableCell>
                                 <TableCell sx={{}}>{e.email}</TableCell>
                                 <TableCell sx={{}}>{e.role}</TableCell>
                                 <TableCell sx={{}}>
-                                    <Box>
-                                        <EditIcon color='primary' onClick={()=>{}} />
-                                        <VisibilityIcon color='primary'/>
-                                        <DeleteIcon color='primary'/>
+                                    <Box sx={{ display: 'flex', gap: "12px" }}>
+                                        <EditIcon fontSize='small' color='primary'
+                                            onClick={() => {
+                                                render!(e);
+                                            }} />
+                                        <VisibilityIcon fontSize='small' color='primary' />
+                                        <DeleteIcon fontSize='small' color='primary' />
                                     </Box>
                                 </TableCell>
                             </TableRow>
-                        })}
+                        }) : children}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box>
+            {!children && <Box sx={{ display: 'flex', justifyContent: "flex-end", marginTop: "20px" }}>
                 <Pagination count={count} onChange={onPageChange} page={page} />
-            </Box>
-        </div>
+            </Box>}
+
+        </Box>
     )
 }

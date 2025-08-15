@@ -1,0 +1,89 @@
+import styled from '@emotion/styled';
+import { Badge, Box, IconButton, TableCell, TableRow, Typography, type BadgeProps } from '@mui/material'
+import { useContext, useState } from 'react';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { TransactionContext } from '../../state/cart/cart_content';
+import CModal from '../model';
+import { DataTable } from '../datatable';
+import CTextField from '../formfields/textfield';
+import DeleteIcon from '@mui/icons-material/Delete';
+import type { ItemsI } from '../../pages/task2/interface';
+
+const Cart = () => {
+
+    const context = useContext(TransactionContext);
+    const [openDilaog, setOpenDilaog] = useState(false);
+
+    const StyledBadge = styled(Badge)<BadgeProps>(() => ({
+        '& .MuiBadge-badge': {
+            right: -3,
+            top: 13,
+            border: `2px solid `,
+            padding: '0 4px',
+        },
+    }));
+
+    const getTotalAmount = () => {
+        const totalAmount = context?.data.reduce((total, amount) => total + (amount.price * amount.quantity), 0);
+        return totalAmount;
+    }
+
+    const removeItems = (item: ItemsI) => {
+        const removedItems = context?.data.filter((e) => e.id != item.id) ?? [];
+        context?.setData(removedItems);
+    }
+    return (
+        <Box>
+            <IconButton aria-label="cart">
+                <StyledBadge badgeContent={context && context.data ? context.data.length : 0} color="secondary">
+                    <AddShoppingCartIcon onClick={() => setOpenDilaog(true)} />
+                </StyledBadge>
+            </IconButton>
+            <CModal isOpen={openDilaog} onClose={() => setOpenDilaog(false)} title='Cart' >
+                <Box>
+                    <DataTable column={[
+                        { label: "S.No", sortable: false },
+                        { label: "Name", sortable: false },
+                        { label: "Quantity", sortable: false },
+                        { label: "Price", sortable: false },
+                        { label: "Action", sortable: false }
+
+                    ]}
+                        rows={context?.data ?? []}>
+                        {
+                            context?.data.map((e, index) => {
+                                return <TableRow key={e.id}>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{e.name}</TableCell>
+                                    <TableCell sx={{ width: '200px' }}>
+                                        <CTextField onchange={() => { }} placeholder='Quantity' value={e.quantity.toString() ?? ""} />
+                                    </TableCell>
+                                    <TableCell>{e.price}</TableCell>
+
+                                    <TableCell>
+                                        <DeleteIcon color='primary' onClick={() => {
+                                            removeItems(e);
+                                        }} />
+                                    </TableCell>
+                                </TableRow>
+                            })
+                        }
+                    </DataTable>
+                    <Box sx={{ display: 'flex', marginTop: '10px', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', gap: '10px' }}>
+                            <CTextField onchange={() => { }} placeholder='Discount Amount' />
+                            <CTextField onchange={() => { }} placeholder='Tax Amount' />
+                        </Box>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                            <Typography variant='h6'>Total Amount</Typography>
+                            <Typography variant='h6'>{getTotalAmount()}</Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </CModal>
+        </Box>
+    );
+}
+
+export default Cart

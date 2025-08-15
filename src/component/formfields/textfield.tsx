@@ -18,10 +18,10 @@ const CTextField = <T extends FieldValues>({
     onchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder: string;
     required?: boolean;
-    validationName: Path<T>;
+    validationName?: Path<T>;
     value?: string | undefined;
     fullWidth?: boolean,
-    register: UseFormRegister<T>;
+    register?: UseFormRegister<T>;
     errors?: FieldError;
     sx?: SxProps<Theme> | undefined,
 }) => {
@@ -31,10 +31,12 @@ const CTextField = <T extends FieldValues>({
                 sx={sx}
                 fullWidth
                 color="primary"
-                {...register(validationName, {
-                    required: true,
-                    onChange: onchange,
-                })}
+                {...(register && validationName
+                    ? register(validationName, {
+                        required: true,
+                        onChange: onchange,
+                    })
+                    : {})}
                 placeholder={placeholder}
                 value={value}
                 id="outlined-basic" label={placeholder} variant="outlined" />
