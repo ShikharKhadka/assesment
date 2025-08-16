@@ -48,3 +48,4 @@ Run server
 ```bash
 npm run dev(Development Server)
 npm run build(Production Server)
+npm run preview(Production Server)

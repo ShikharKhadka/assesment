@@ -2,16 +2,16 @@ import styled from '@emotion/styled';
 import { Badge, Box, IconButton, TableCell, TableRow, Typography, type BadgeProps } from '@mui/material'
 import { useContext, useState } from 'react';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { TransactionContext } from '../../state/cart/cart_content';
 import CModal from '../model';
 import { DataTable } from '../datatable';
 import CTextField from '../formfields/textfield';
 import DeleteIcon from '@mui/icons-material/Delete';
 import type { ItemsI } from '../../pages/task2/interface';
+import { CartContext } from '../../state/cart/cart_content';
 
 const Cart = () => {
 
-    const context = useContext(TransactionContext);
+    const context = useContext(CartContext);
     // const [openDilaog, setOpenDilaog] = useState(false);
     const [amount, setAmount] = useState({
         tax: '',

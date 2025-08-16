@@ -1,5 +1,4 @@
 import { Button } from '@mui/material'
-import React from 'react'
 
 const CButton = ({ title, onClick }: { title: string, onClick: () => void }) => {
     return (

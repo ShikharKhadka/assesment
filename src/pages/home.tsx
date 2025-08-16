@@ -42,7 +42,7 @@ export const Home = () => {
         }, 1000);
     });
 
-    const onPageChange = (e: ChangeEvent<unknown>, page: number) => {
+    const onPageChange = ( page: number) => {
         setPage(page);
         const tableList = users.slice((((page - 1) * 10)), page * 10);
         setData(tableList);
@@ -99,7 +99,7 @@ export const Home = () => {
                 count={10}
                 page={page}
                 onSort={onSort}
-                onPageChange={onPageChange}
+                onPageChange={(_,page)=>{onPageChange(page)}}
                 render={(row) => {
                     const rowData = row as UserI;
                     setRowData(rowData);
