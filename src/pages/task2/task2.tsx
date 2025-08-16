@@ -1,15 +1,15 @@
 import { useContext, useEffect } from 'react';
 import ProductGrid from '../../component/productgrid';
-import { TransactionContext } from '../../state/cart/cart_content';
 import { products } from './constants';
 import { Box } from '@mui/material';
+import { CartContext } from '../../state/cart/cart_content';
 
 
 
 
 
 const Task2 = () => {
-    const context = useContext(TransactionContext);
+    const context = useContext(CartContext);
 
     useEffect(() => {
         // disable scroll on mount

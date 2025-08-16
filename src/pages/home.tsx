@@ -1,9 +1,11 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useCallback, useContext, useEffect, useState, type ChangeEvent } from "react";
 import { DataTable, type UserI } from "../component/datatable"
 import { users } from "./constant"
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import CModal from "../component/model";
 import { UserEditForm } from "../component/form/usereditform";
+import CTextField from "../component/formfields/textfield";
+import { ThemeDataContext } from "../state/theme/theme_context";
 
 
 export const Home = () => {
@@ -15,14 +17,19 @@ export const Home = () => {
         editOpen: false,
         viewOpen: false,
     });
+    const [filteredUsers, setFilteredUsers] = useState<UserI[]>(data);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+
+    const themeContext = useContext(ThemeDataContext);
     const onSort = (key: string, direction: boolean) => {
         const dataList = data.sort((a, b) => {
             if (a[key] < b[key]) {
-                return direction ? 1 : -1; // flipped
+                return direction ? 1 : -1;
             }
             if (a[key] > b[key]) {
-                return direction ? -1 : 1; // flipped
+                return direction ? -1 : 1;
             }
             return 0;
         });
@@ -37,9 +44,22 @@ export const Home = () => {
 
     const onPageChange = (e: ChangeEvent<unknown>, page: number) => {
         setPage(page);
-        const tableList = users.slice((((page - 1) * 10)), page * 10); //default 10
+        const tableList = users.slice((((page - 1) * 10)), page * 10);
         setData(tableList);
     }
+
+    const onSearch = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+
+        if (value) {
+            const filtered = data.filter(f =>
+                f.name.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredUsers(filtered);
+        } else {
+            setFilteredUsers(data);
+        }
+    }, [data]);
 
 
 
@@ -48,6 +68,7 @@ export const Home = () => {
             const userList = e as UserI[];
             const tableList = userList.slice((((page - 1) * 10)), page * 10);
             setData(tableList);
+            setFilteredUsers(tableList);
         }).catch((_) => {
             setData([]);
         }).finally(() => {
@@ -62,6 +83,11 @@ export const Home = () => {
 
     return (
         <Box >
+            {themeContext?.theme == 'client-a' ?
+                <Box sx={{ width: isMobile ? '80%' : '30%',paddingBottom: 4 }}>
+                    <CTextField onchange={onSearch} placeholder="Search" />
+                </Box>
+                : <></>}
             <DataTable
                 column={[
                     { key: 'name', label: 'Full Name', sortable: true },
@@ -69,7 +95,7 @@ export const Home = () => {
                     { key: 'role', label: 'Role', sortable: false },
                     { key: 'actions', label: 'Actions', sortable: false }
                 ]}
-                rows={data}
+                rows={filteredUsers}
                 count={10}
                 page={page}
                 onSort={onSort}
@@ -80,7 +106,6 @@ export const Home = () => {
                     setDialogState({ ...dialog, editOpen: true });
                 }}
             />
-
             {dialog.editOpen && <CModal size="md" title="Edit Users" isOpen={dialog.editOpen} onClose={() => setDialogState({ ...dialog, editOpen: false })} closeOnOverlayClick={false}>
                 <UserEditForm row={rowData!} />
             </CModal>}

@@ -19,7 +19,7 @@ const CModal = ({ title, children, isOpen, onClose, size, closeOnOverlayClick = 
                     width: "100vw",
                     height: "100vh",
                     backgroundColor: "rgba(0, 0, 0, 0.5)",
-                    zIndex: 1300, // similar to MUI dialog backdrop
+                    zIndex: 1300,
                 }}>
                     <Box
                         onClick={(e) => { e.stopPropagation() }}

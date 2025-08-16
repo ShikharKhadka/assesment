@@ -3,20 +3,21 @@ import { createBrowserRouter } from "react-router";
 import { Home } from "../pages/home";
 import { Layout } from "../layout/layout";
 import Task2 from "../pages/task2/task2";
+import Default from "../pages/default";
 
 export const routerProvider = createBrowserRouter([
   {
     path: "/",
     Component: Layout,
     children: [
+        {
+        index: true,
+        Component: Default
+      },
       {
         Component: Home,
-        children: [
-          {
-            index: true,
-            path: "home",
-          },
-        ],
+        path: "home",
+
       },
       {
         Component: Task2,

@@ -1,11 +1,10 @@
 // TransactionContext.tsx
 import React, { useState, type ReactNode } from 'react';
-import { TransactionContext } from './cart_content';
 import type { ItemsI } from '../../pages/task2/interface';
+import { CartContext } from './cart_content';
 
 
 
-// Provider component
 interface TransactionProviderProps {
   children: ReactNode;
 }
@@ -15,8 +14,8 @@ export const TransactionProvider: React.FC<TransactionProviderProps> = ({ childr
     const [isCartOpen, setcartOpen] = useState(false);
 
   return (
-    <TransactionContext.Provider value={{ data, setData, isCartOpen,setcartOpen }}>
+    <CartContext.Provider value={{ data, setData, isCartOpen,setcartOpen }}>
       {children}
-    </TransactionContext.Provider>
+    </CartContext.Provider>
   );
 };

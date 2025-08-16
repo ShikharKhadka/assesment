@@ -1,12 +1,19 @@
+import { ThemeProvider } from "@emotion/react";
+import { TransactionProvider } from "./state/cart/cart_provider";
+import { RouterProvider } from "react-router";
+import { routerProvider } from "./router/router";
+import { clientatheme, clientbtheme } from "./theme/theme";
+import { useContext } from "react";
+import { ThemeDataContext } from "./state/theme/theme_context";
 
-import './App.css'
-import { Navigate } from 'react-router'
-
-function App() {
+export default function App() {
+  const theme = useContext(ThemeDataContext);
 
   return (
-    <Navigate to={"/home"}></Navigate>
-  )
+    <ThemeProvider theme={(theme?.theme) == "client-b" ? clientbtheme : clientatheme}>
+      <TransactionProvider>
+        <RouterProvider router={routerProvider} />
+      </TransactionProvider>
+    </ThemeProvider >
+  );
 }
-
-export default App

@@ -1,11 +1,12 @@
 import { Box, Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import type React from 'react';
-import { useState, type ChangeEvent, type ReactNode } from 'react';
+import { useContext, useState, type ChangeEvent, type ReactNode } from 'react';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ThemeDataContext } from '../state/theme/theme_context';
 // import type { ReactNode } from 'react';
 
 
@@ -38,6 +39,7 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
 
     const [isDesc, setDesc] = useState(false);
     const [sortKey, setSortKey] = useState("");
+    const themeContext = useContext(ThemeDataContext);
 
     const onSortChange = (key: string) => {
         setSortKey(key);
@@ -93,7 +95,7 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                                                 render!(e);
                                             }} />
                                         <VisibilityIcon fontSize='small' color='primary' />
-                                        <DeleteIcon fontSize='small' color='primary' />
+                                        {themeContext?.theme == 'client-a' && <DeleteIcon fontSize='small' color='primary' />}
                                     </Box>
                                 </TableCell>
                             </TableRow>
@@ -101,10 +103,9 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                     </TableBody>
                 </Table>
             </TableContainer>
-            {!children && <Box sx={{ display: 'flex', justifyContent: "flex-end", marginTop: "20px" }}>
+            {!children && themeContext?.theme == 'client-a' && <Box sx={{ display: 'flex', justifyContent: "flex-end", marginTop: "20px" }}>
                 <Pagination count={count} onChange={onPageChange} page={page} />
             </Box>}
-
         </Box>
     )
 }
