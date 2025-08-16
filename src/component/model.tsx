@@ -1,9 +1,12 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { createPortal } from 'react-dom';
 import CloseIcon from '@mui/icons-material/Close';
 import { type ReactNode } from 'react';
 
 const CModal = ({ title, children, isOpen, onClose, size, closeOnOverlayClick = true }: { title: string, size?: 'sx' | 'md', children: ReactNode, isOpen: boolean, onClose: () => void, closeOnOverlayClick?: boolean }) => {
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
 
@@ -27,12 +30,13 @@ const CModal = ({ title, children, isOpen, onClose, size, closeOnOverlayClick = 
                             left: "50%",
                             transform: "translate(-50%, -50%)",
                             height: 300,
-                            width: size == 'sx' ? "30%" : "40%",
+                            width: size == 'sx' ? isMobile ? '80%' : "30%" : isMobile ? "80%" : '40%',
                             backgroundColor: "white",
                             zIndex: 1400, // above backdrop
                             p: 2,
                             borderRadius: 2,
                             boxShadow: 24,
+                            overflow: 'auto'
                         }}
                     >
                         <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: '20px' }}>

@@ -31,12 +31,13 @@ const CTextField = <T extends FieldValues>({
                 sx={sx}
                 fullWidth
                 color="primary"
+                onChange={onchange}
                 {...(register && validationName
                     ? register(validationName, {
                         required: true,
                         onChange: onchange,
                     })
-                    : {})}
+                    : undefined)}
                 placeholder={placeholder}
                 value={value}
                 id="outlined-basic" label={placeholder} variant="outlined" />

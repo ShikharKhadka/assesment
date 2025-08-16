@@ -47,11 +47,10 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
     };
 
     return (
-        <Box style={{ width: !children ? "80%" : '100%' }}>
-            <TableContainer component={Paper} sx={{}}>
-                <Table>
+        <Box style={{ width: '100%' }}>
+            <TableContainer component={Paper} >
+                <Table sx={{ minWidth: '100px' }}>
                     <TableHead sx={{
-                        overflowX: "auto",     // horizontal scroll
                     }}>
                         <TableRow>
                             {column.map((e) => {
@@ -84,11 +83,11 @@ export const DataTable: React.FC<DataTableI> = ({ column, rows, page, count, onP
                     }}>
                         {!children ? rows.map((e) => {
                             return <TableRow key={e.email}>
-                                <TableCell sx={{}}>{e.name}</TableCell>
-                                <TableCell sx={{}}>{e.email}</TableCell>
-                                <TableCell sx={{}}>{e.role}</TableCell>
-                                <TableCell sx={{}}>
-                                    <Box sx={{ display: 'flex', gap: "12px" }}>
+                                <TableCell sx={{ minWidth: 100 }}>{e.name}</TableCell>
+                                <TableCell sx={{ minWidth: 100 }}>{e.email}</TableCell>
+                                <TableCell sx={{ minWidth: 100 }}>{e.role}</TableCell>
+                                <TableCell sx={{ minWidth: 100 }}>
+                                    <Box sx={{ display: 'flex', gap: "12px", minWidth: 100 }}>
                                         <EditIcon fontSize='small' color='primary'
                                             onClick={() => {
                                                 render!(e);

@@ -12,9 +12,10 @@ interface TransactionProviderProps {
 
 export const TransactionProvider: React.FC<TransactionProviderProps> = ({ children }) => {
   const [data, setData] = useState<ItemsI[]>([]);
-  const cartOnClick = () => { };
+    const [isCartOpen, setcartOpen] = useState(false);
+
   return (
-    <TransactionContext.Provider value={{ data, setData, cartOnClick }}>
+    <TransactionContext.Provider value={{ data, setData, isCartOpen,setcartOpen }}>
       {children}
     </TransactionContext.Provider>
   );

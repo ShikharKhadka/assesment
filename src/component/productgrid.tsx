@@ -1,5 +1,4 @@
-import { Box, Button, Grid, Typography } from '@mui/material'
-import { products } from '../pages/task2/constants';
+import { Box, Grid, Typography } from '@mui/material'
 import CButton from './button';
 import type { ItemsI } from '../pages/task2/interface';
 

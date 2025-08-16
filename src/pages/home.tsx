@@ -61,7 +61,7 @@ export const Home = () => {
     }
 
     return (
-        <Box>
+        <Box >
             <DataTable
                 column={[
                     { key: 'name', label: 'Full Name', sortable: true },

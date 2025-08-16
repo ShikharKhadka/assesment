@@ -1,5 +1,5 @@
-import { AppBar, Badge, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useTheme, type BadgeProps } from '@mui/material'
-import { Navigate, Outlet } from 'react-router';
+import { AppBar, Box, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, Typography, useMediaQuery, useTheme, } from '@mui/material'
+import { Outlet } from 'react-router';
 import './layout.css';
 import Cart from '../component/header/cart';
 
@@ -13,6 +13,7 @@ export interface DrawerItemI {
 export const Layout = () => {
 
     const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const items: DrawerItemI[] = [
         {
             id: 1,
@@ -42,7 +43,7 @@ export const Layout = () => {
 
     return (
         <Box sx={{
-            width: '100vw',    // full viewport width
+            width: '96vw',    // full viewport width
             height: 'auto',   // full viewport height
         }}>
             {/* <Navigate to={"/home"}></Navigate> */}
@@ -53,15 +54,12 @@ export const Layout = () => {
                         <Typography variant="h6" color={theme.palette.primary.contrastText}>
                             Test
                         </Typography>
-                      <Cart/>
+                        <Cart />
                     </Toolbar>
                 </AppBar>
 
-                <Box sx={{
-                    display: "flex",
-                    alignContent: 'flex-start',
-                }}>
-                    <Drawer
+                <Box sx={{}}>
+                    {!isMobile && <Drawer
                         variant="permanent"
                         open
                         sx={{
@@ -103,21 +101,19 @@ export const Layout = () => {
                                 </ListItemButton>
                             </ListItem>
                         </List>
-                    </Drawer>
+                    </Drawer>}
+
                     <Box
                         component="main"
                         sx={{
                             marginTop: '100px',
-                            paddingLeft: `${400}px`,
-                            width: 'calc(100vw )',
+                            paddingLeft: !isMobile ? `${300}px` : '',
+                            width: !isMobile ? 'calc(100vw - 240px )':'100vw',
                         }}
                     >
                         <Outlet />
                     </Box>
                 </Box>
-
-                {/* Sidebar Drawer */}
-
             </Box>
         </Box >
     )

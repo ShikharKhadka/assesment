@@ -12,7 +12,11 @@ import type { ItemsI } from '../../pages/task2/interface';
 const Cart = () => {
 
     const context = useContext(TransactionContext);
-    const [openDilaog, setOpenDilaog] = useState(false);
+    // const [openDilaog, setOpenDilaog] = useState(false);
+    const [amount, setAmount] = useState({
+        tax: '',
+        discount: '',
+    })
 
     const StyledBadge = styled(Badge)<BadgeProps>(() => ({
         '& .MuiBadge-badge': {
@@ -24,7 +28,13 @@ const Cart = () => {
     }));
 
     const getTotalAmount = () => {
-        const totalAmount = context?.data.reduce((total, amount) => total + (amount.price * amount.quantity), 0);
+        const totalAmount = (context?.data.reduce((total, amount) => total + (amount.price * amount.quantity), 0));
+        if (totalAmount) {
+            const amountAfterDiscount = parseFloat(totalAmount.toString()) - parseFloat(amount.discount ? amount.discount : '0');
+            const amountAfterTax = parseFloat(amountAfterDiscount.toString()) + parseFloat(amount.tax ? amount.tax : '0');
+
+            return amountAfterTax;
+        }
         return totalAmount;
     }
 
@@ -32,22 +42,36 @@ const Cart = () => {
         const removedItems = context?.data.filter((e) => e.id != item.id) ?? [];
         context?.setData(removedItems);
     }
+
+    const qunatityOnchange = (id: string, f: React.ChangeEvent<HTMLInputElement>) => {
+        if (!context) return;
+        const itemList = context.data?.map((e) => {
+            if (e.id == id) {
+                return { ...e, quantity: Number(f.target.value) }
+            }
+            return e;
+        }) ?? [];
+
+        context.setData(itemList);
+    }
     return (
+
         <Box>
             <IconButton aria-label="cart">
                 <StyledBadge badgeContent={context && context.data ? context.data.length : 0} color="secondary">
-                    <AddShoppingCartIcon onClick={() => setOpenDilaog(true)} />
+                    <AddShoppingCartIcon onClick={() => context?.setcartOpen(true)} />
                 </StyledBadge>
             </IconButton>
-            <CModal isOpen={openDilaog} onClose={() => setOpenDilaog(false)} title='Cart' >
-                <Box>
+            <CModal isOpen={context?.isCartOpen ?? false} onClose={() => context?.setcartOpen(false)} title='Cart' >
+                {context?.data.length == 0 ? <Typography variant='body1'>
+                    Add Item to cart
+                </Typography> : <Box>
                     <DataTable column={[
                         { label: "S.No", sortable: false },
                         { label: "Name", sortable: false },
                         { label: "Quantity", sortable: false },
                         { label: "Price", sortable: false },
                         { label: "Action", sortable: false }
-
                     ]}
                         rows={context?.data ?? []}>
                         {
@@ -56,10 +80,10 @@ const Cart = () => {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{e.name}</TableCell>
                                     <TableCell sx={{ width: '200px' }}>
-                                        <CTextField onchange={() => { }} placeholder='Quantity' value={e.quantity.toString() ?? ""} />
+                                        <CTextField onchange={(value) => qunatityOnchange(e.id, value)}
+                                            placeholder='Quantity' value={e.quantity.toString() ?? ""} />
                                     </TableCell>
                                     <TableCell>{e.price}</TableCell>
-
                                     <TableCell>
                                         <DeleteIcon color='primary' onClick={() => {
                                             removeItems(e);
@@ -71,8 +95,10 @@ const Cart = () => {
                     </DataTable>
                     <Box sx={{ display: 'flex', marginTop: '10px', justifyContent: 'space-between' }}>
                         <Box sx={{ display: 'flex', gap: '10px' }}>
-                            <CTextField onchange={() => { }} placeholder='Discount Amount' />
-                            <CTextField onchange={() => { }} placeholder='Tax Amount' />
+                            <CTextField onchange={(e) => {
+                                setAmount({ ...amount, discount: e.target.value })
+                            }} placeholder='Discount Amount' />
+                            <CTextField onchange={(e) => { setAmount({ ...amount, tax: e.target.value }) }} placeholder='Tax Amount' />
                         </Box>
 
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -80,7 +106,8 @@ const Cart = () => {
                             <Typography variant='h6'>{getTotalAmount()}</Typography>
                         </Box>
                     </Box>
-                </Box>
+                </Box>}
+
             </CModal>
         </Box>
     );
