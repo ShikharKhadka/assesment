@@ -3,11 +3,6 @@
 This project is a React application built with TypeScript and Material-UI (MUI).  
 It features a two task usermanagement with datatable and cart management system.
 
-
-**Data** with search, edit functionality, and modals for user management.
-
----
-
 ## User Management System
 - **DataGrid** displaying user or task data  
 - **Search** functionality to filter data  
